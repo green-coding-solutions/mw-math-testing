@@ -1,0 +1,92 @@
+author: Arne Tarara
+name: Wiki Math
+description: Wiki Math Extension Test
+
+services:
+  mediawiki-web:
+    image: docker-registry.wikimedia.org/dev/bookworm-apache2:1.0.1
+    user: "1000:1000"
+    ports:
+      - "${MW_DOCKER_PORT:-8080}:8080"
+    setup-commands:
+      - mkdir -p /var/www/html/w
+      - cp -r /tmp/repo/mediawiki/. /var/www/html/w/
+    env_file:
+      - '.env'
+    environment:
+      MW_LOG_DIR: /var/www/html/w/cache
+      MW_DOCKER_PORT: "${MW_DOCKER_PORT:-8080}"
+
+
+  mediawiki:
+    image: docker-registry.wikimedia.org/dev/bookworm-php83-fpm:1.0.0
+    user: "1000:1000"
+    setup-commands:
+      - mkdir -p /var/www/html/w
+      - cp -r /tmp/repo/mediawiki/. /var/www/html/w/
+    env_file:
+      - '.env'
+    environment:
+      COMPOSER_CACHE_DIR: '/var/www/html/w/cache/composer'
+      MW_SERVER: 'http://localhost:${MW_DOCKER_PORT:-8080}'
+      MW_DOCKER_PORT: "${MW_DOCKER_PORT:-8080}"
+      MW_SCRIPT_PATH: '/w'
+      MW_DBPATH: '/var/www/html/w/cache/sqlite'
+      MW_DBTYPE: 'sqlite'
+      MW_LANG: 'en'
+      MW_USER: 'Admin'
+      MW_PASS: 'dockerpass'
+      MW_SITENAME: 'MediaWiki'
+      MW_LOG_DIR: /var/www/html/w/cache
+      XDEBUG_CONFIG: ''
+      XDEBUG_ENABLE: 'false'
+      XHPROF_ENABLE: 'false'
+
+
+  mediawiki-jobrunner:
+    image: docker-registry.wikimedia.org/dev/bookworm-php83-jobrunner:1.0.0
+    user: "1000:1000"
+    setup-commands:
+      - mkdir -p /var/www/html/w
+      - cp -r /tmp/repo/mediawiki/. /var/www/html/w/
+    env_file:
+      - '.env'
+    environment:
+      MW_LOG_DIR: /var/www/html/w/cache
+      MW_INSTALL_PATH: /var/www/html/w
+
+
+flow:
+  - name: Compose Update
+    container: mediawiki
+    commands:
+      - type: console
+        command: composer update
+  - name: Docker Install
+    container: mediawiki
+    commands:
+      - type: console
+        command: /bin/bash /docker/install.sh
+  - name: Activate extensions
+    container: mediawiki
+    commands:
+      - type: console
+        shell: sh
+        command: echo -e "wfLoadSkin( 'Vector' ); \nwfLoadExtension( 'Math' );" >> /var/www/html/w/LocalSettings.php
+      - type: console
+        command: php maintenance/run.php update.php --quick
+
+  - name: Maintenance
+    container: mediawiki
+    commands:
+      - type: console
+        shell: bash
+        command: cd /var/www/html/w/extensions/Math/maintenance && ./downloadMoreTexVCtests.sh
+
+  - name: Run Tests
+    container: mediawiki
+    commands:
+      - type: console
+        shell: bash
+        command: export COMPOSER_PROCESS_TIMEOUT=3600 && cd /var/www/html/w/ && composer phpunit -- ./extensions/Math/tests/phpunit/unit
+
