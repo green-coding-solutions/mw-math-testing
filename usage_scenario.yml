@@ -11,6 +11,8 @@ services:
     setup-commands:
       - mkdir -p /var/www/html/w
       - cp -r /tmp/repo/mediawiki/. /var/www/html/w/
+      - cp -r /tmp/repo/Vector /var/www/html/w/skins/Vector
+      - cp -r /tmp/repo/Math /var/www/html/w/extensions/Math
     env_file:
       - '.env'
     environment:
@@ -24,6 +26,9 @@ services:
     setup-commands:
       - mkdir -p /var/www/html/w
       - cp -r /tmp/repo/mediawiki/. /var/www/html/w/
+      - cp -r /tmp/repo/Vector /var/www/html/w/skins/Vector
+      - cp -r /tmp/repo/Math /var/www/html/w/extensions/Math
+
     env_file:
       - '.env'
     environment:
@@ -49,6 +54,9 @@ services:
     setup-commands:
       - mkdir -p /var/www/html/w
       - cp -r /tmp/repo/mediawiki/. /var/www/html/w/
+      - cp -r /tmp/repo/Vector /var/www/html/w/skins/Vector
+      - cp -r /tmp/repo/Math /var/www/html/w/extensions/Math
+
     env_file:
       - '.env'
     environment:
@@ -72,7 +80,7 @@ flow:
     commands:
       - type: console
         shell: sh
-        command: echo -e "wfLoadSkin( 'Vector' ); \nwfLoadExtension( 'Math' );" >> /var/www/html/w/LocalSettings.php
+        command: echo "wfLoadSkin( 'Vector' ); \nwfLoadExtension( 'Math' );" >> LocalSettings.php
       - type: console
         command: php maintenance/run.php update.php --quick
 
@@ -88,5 +96,4 @@ flow:
     commands:
       - type: console
         shell: bash
-        command: export COMPOSER_PROCESS_TIMEOUT=3600 && cd /var/www/html/w/ && composer phpunit -- ./extensions/Math/tests/phpunit/unit
-
+        command: export COMPOSER_PROCESS_TIMEOUT=3600 && composer phpunit -- ./extensions/Math/tests/phpunit/unit
