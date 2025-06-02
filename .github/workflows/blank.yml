@@ -36,7 +36,7 @@ jobs:
         run: ./run.sh && echo "success!"
 
       - name: 'Dump Raw Measurement Data'
-        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data@main
+        uses: green-coding-solutions/eco-ci-energy-estimation/.github/actions/dump-raw-measurement-data@main
 
       - name: Tests measurement
         uses: green-coding-solutions/eco-ci-energy-estimation@v4.7 # use hash or @vX here (See note below)
@@ -46,13 +46,13 @@ jobs:
         continue-on-error: true # recommended setting for production. See notes below.
 
       - name: 'Dump Raw Measurement Data'
-        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data@main
+        uses: green-coding-solutions/eco-ci-energy-estimation/.github/actions/dump-raw-measurement-data@main
       
       - name: Prepare additional tests
         run: ./prepare-more-tests.sh && echo "success!"
 
       - name: 'Dump Raw Measurement Data'
-        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data@main
+        uses: green-coding-solutions/eco-ci-energy-estimation/.github/actions/dump-raw-measurement-data@main
       
       
       - name: Tests prepare more
@@ -63,13 +63,13 @@ jobs:
         continue-on-error: true # recommended setting for production. See notes below.
 
       - name: 'Dump Raw Measurement Data'
-        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data@main
+        uses: green-coding-solutions/eco-ci-energy-estimation/.github/actions/dump-raw-measurement-data@main
       
       - name: Run integration tests
         run: ./integration.sh && echo "success!"
 
       - name: 'Dump Raw Measurement Data'
-        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data@main
+        uses: green-coding-solutions/eco-ci-energy-estimation/.github/actions/dump-raw-measurement-data@main
 
       
       - name: Measure integration
@@ -80,14 +80,14 @@ jobs:
         continue-on-error: true # recommended setting for production. See notes below.
 
       - name: 'Dump Raw Measurement Data'
-        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data@main
+        uses: green-coding-solutions/eco-ci-energy-estimation/.github/actions/dump-raw-measurement-data@main
 
       
       - name: Run performance tests
         run: ./performance.sh && echo "success!"
 
       - name: 'Dump Raw Measurement Data'
-        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data@main
+        uses: green-coding-solutions/eco-ci-energy-estimation/.github/actions/dump-raw-measurement-data@main
 
       
       - name: Measure performance
@@ -98,7 +98,7 @@ jobs:
         continue-on-error: true # recommended setting for production. See notes below.
 
       - name: 'Dump Raw Measurement Data'
-        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data@main
+        uses: green-coding-solutions/eco-ci-energy-estimation/.github/actions/dump-raw-measurement-data@main
 
       
       - name: Show Energy Results
