@@ -30,40 +30,77 @@ jobs:
           calculate-co2: false
       - uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: true      
       # Runs a single command using the runners shell
       - name: Run the test
         run: ./run.sh && echo "success!"
+
+      - name: 'Dump Raw Measurement Data'
+        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data
+
       - name: Tests measurement
         uses: green-coding-solutions/eco-ci-energy-estimation@v4.7 # use hash or @vX here (See note below)
         with:
           task: get-measurement
           label: 'tests'
         continue-on-error: true # recommended setting for production. See notes below.
+
+      - name: 'Dump Raw Measurement Data'
+        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data
+      
       - name: Prepare additional tests
         run: ./prepare-more-tests.sh && echo "success!"
+
+      - name: 'Dump Raw Measurement Data'
+        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data
+      
+      
       - name: Tests prepare more
         uses: green-coding-solutions/eco-ci-energy-estimation@v4.7 # use hash or @vX here (See note below)
         with:
           task: get-measurement
           label: 'prepare-more'
         continue-on-error: true # recommended setting for production. See notes below.
+
+      - name: 'Dump Raw Measurement Data'
+        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data
+      
       - name: Run integration tests
         run: ./integration.sh && echo "success!"
+
+      - name: 'Dump Raw Measurement Data'
+        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data
+
+      
       - name: Measure integration
         uses: green-coding-solutions/eco-ci-energy-estimation@v4.7 # use hash or @vX here (See note below)
         with:
           task: get-measurement
           label: 'integration'
         continue-on-error: true # recommended setting for production. See notes below.
+
+      - name: 'Dump Raw Measurement Data'
+        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data
+
+      
       - name: Run performance tests
         run: ./performance.sh && echo "success!"
+
+      - name: 'Dump Raw Measurement Data'
+        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data
+
+      
       - name: Measure performance
         uses: green-coding-solutions/eco-ci-energy-estimation@v4.7 # use hash or @vX here (See note below)
         with:
           task: get-measurement
           label: 'performance'
         continue-on-error: true # recommended setting for production. See notes below.
+
+      - name: 'Dump Raw Measurement Data'
+        uses: green-coding-solutions/green-metrics-tool/.github/actions/dump-raw-measurement-data
+
+      
       - name: Show Energy Results
         uses: green-coding-solutions/eco-ci-energy-estimation@v4.7 # use hash or @vX here (See note below)
         with:
